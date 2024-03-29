@@ -1,0 +1,22 @@
+- hosts: localhost
+  gather_facts: no
+  vars_files:
+        - vault_cred.yml
+  tasks:
+    - name: Creating EC2 instances
+      include_role:
+        name: ec2
+
+- hosts: k8s_master
+  gather_facts: no
+  tasks:
+    - name: Configuring master node
+      include_role:
+        name: master_node
+
+- hosts: k8s_worker
+  gather_facts: no
+  tasks:
+    - name: Configuring worker node
+      include_role:
+        name: worker_node
