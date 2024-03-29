@@ -1,0 +1,17 @@
+---
+# vars file for vm
+instance_tag:
+        - master
+        - slave1
+        - slave2
+
+python_pkgs:
+        - boto
+        - boto3
+
+sg_name: Allow_All_SG
+region_name: ap-southeast-1
+subnet_name: subnet-0e9f878f1a81d7fd3
+ami_id: "ami-06659da38a28deceb"
+keypair: aws
+instance_flavour: t2.micro
