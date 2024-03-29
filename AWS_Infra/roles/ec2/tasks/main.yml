@@ -1,7 +1,7 @@
 ---
 # tasks file for ec2
 
-- name: Creating Security Group for K8s Cluster
+- name: Creating Security Group for K8s cluster
   ec2_group:
     name: "{{ sg_name }}"
     description: Security Group for allowing all porti

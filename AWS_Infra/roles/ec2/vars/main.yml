@@ -1,5 +1,5 @@
 ---
-# vars file for ec2
+# vars file for ec2 instances
 instance_tag:
         - master-node-01
         - worker-node-01
