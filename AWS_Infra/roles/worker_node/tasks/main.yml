@@ -1,0 +1,51 @@
+---
+# tasks file for k8s_worker
+- name: Add kubeadm repository on worker Node
+  yum_repository:
+    name: kube
+    description: Kubernetes repo
+    baseurl: https://pkgs.k8s.io/core:/stable:/v1.28/rpm/
+    enabled: 1
+    gpgcheck: 1
+    gpgkey: https://pkgs.k8s.io/core:/stable:/v1.28/rpm/repodata/repomd.xml.key
+
+- name: Installing required tools on worker Node
+  package:
+    name:
+      - docker
+      - kubeadm
+      - wget
+    state: present
+
+- name: execute commands mentioned in setup script
+  command: sh /home/centos/setup.sh
+
+- name: Staring & enabling Docker & kubelet on worker Node
+  service:
+    name: "{{ item }}"
+    state: started
+    enabled: yes
+  loop: "{{ service_names }}"
+
+- name: Updating IP tables on Slave Node
+  copy:
+    dest: /etc/sysctl.d/k8s.conf
+    content: |
+      net.bridge.bridge-nf-call-ip6tables = 1
+      net.bridge.bridge-nf-call-iptables = 1
+
+- name: Reloading sysctl on Slave Node
+  command: sysctl --system
+
+- name: Worker node joining the master node
+  command: "{{ hostvars[groups['k8s_master'][0]]['token']['stdout'] }}"
+
+- name: Setup kubeconfig on worker node
+  shell:
+    cmd: |
+      echo "{{ hostvars[groups['k8s_master'][0]]['kubeconf']['stdout'] }}" >> /home/centos/kubeconfig.conf
+      sudo chown centos:centos /home/centos/kubeconfig.conf
+      export KUBECONFIG=/home/centos/kubeconfig.conf
+
+
+

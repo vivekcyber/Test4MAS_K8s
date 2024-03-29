@@ -10,4 +10,4 @@ region_name: ap-southeast-1
 subnet_name: subnet-0e9f878f1a81d7fd3
 ami_id: ami-0d130eab12d1ea78a
 keypair: aws
-instance_size: t2.micro
+instance_size: t2.medium

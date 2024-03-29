@@ -1,0 +1,53 @@
+---
+# tasks file for k8s_master
+- name: Add kubeadm repository on Master Node
+  yum_repository:
+    name: kube
+    description: Kubernetes repo
+    baseurl: https://pkgs.k8s.io/core:/stable:/v1.28/rpm/
+    enabled: 1
+    gpgcheck: 1
+    gpgkey: https://pkgs.k8s.io/core:/stable:/v1.28/rpm/repodata/repomd.xml.key
+
+- name: Installing required tools on Master Node
+  package:
+    name:
+      - docker
+      - kubeadm
+      - wget
+    state: present
+
+- name: Execute commands mentioned in setup script
+  command: sh /home/centos/setup.sh
+
+- name: Staring & enabling Docker & kubelet on Master Node
+  service:
+    name: "{{ item }}"
+    state: started
+    enabled: yes
+  loop: "{{ service_names }}"
+
+- name: Kubeadm command to pull control plane images
+  command: kubeadm config images pull
+
+- name: Kubeadm command to initialise the cluster
+  command: kubeadm init --pod-network-cidr=10.244.0.0/16
+
+- name: Setting up kubectl on Master Node
+  shell:
+    cmd: |
+      mkdir -p $HOME/.kube
+      sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+      sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+- name: Deploying Flannel on master node
+  command: kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+
+- name: Creating token for Slave
+  command: kubeadm token create  --print-join-command
+  register: token
+
+- name: Storing Kube config in a variable for transferring to worker node
+  command: cat /etc/kubernetes/admin.conf
+  register: kubeconf
+
