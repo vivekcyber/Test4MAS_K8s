@@ -10,6 +10,8 @@
 - hosts: k8s_master
   gather_facts: no
   tasks:
+    - name: Copy setup script
+      copy: src=setup.sh dest=/home/centos mode=0755
     - name: Configuring master node
       include_role:
         name: master_node
@@ -17,6 +19,8 @@
 - hosts: k8s_worker
   gather_facts: no
   tasks:
+    - name: Copy setup script
+      copy: src=setup.sh dest=/home/centos mode=0755
     - name: Configuring worker node
       include_role:
         name: worker_node
