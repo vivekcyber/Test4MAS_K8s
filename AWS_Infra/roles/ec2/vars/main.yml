@@ -3,7 +3,6 @@
 instance_tag:
         - master-node-01
         - worker-node-01
-        - worker-node-02
 
 sg_name: Allow_All_SG
 region_name: ap-southeast-1

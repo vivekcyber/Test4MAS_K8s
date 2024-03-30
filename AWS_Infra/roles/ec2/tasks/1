@@ -44,8 +44,13 @@
     hostname: "{{ ec2.results[1].instances[0].public_ip_address }}"
     groupname: k8s_worker
 
+- name: Add 2nd Worker Node to worker hsot group
+  add_host:
+    hostname: "{{ ec2.results[2].instances[0].public_ip_address }}"
+    groupname: k8s_worker
+
 - name: Check for SSH to be availabel on port 22
   wait_for:
-    host: "{{ ec2.results[1].instances[0].public_dns_name }}"
+    host: "{{ ec2.results[2].instances[0].public_dns_name }}"
     port: 22
     state: started
