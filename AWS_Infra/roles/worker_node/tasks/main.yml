@@ -12,11 +12,10 @@
 - name: Installing required tools on worker Node
   package:
     name:
-      - docker
       - kubeadm
       - wget
       - git
-      - java
+      - zip
     state: present
 
 - name: execute commands mentioned in setup script

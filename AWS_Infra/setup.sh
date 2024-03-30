@@ -2,7 +2,9 @@
 
 #Add stable docker-ce repo to install containerd runtime
 yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
-yum install containerd.io -y
+
+# Below command to install latest docker version
+yum install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
 
 #Install the  cri-dockerd to support on docker
 cd ~
