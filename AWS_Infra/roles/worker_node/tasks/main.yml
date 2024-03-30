@@ -45,6 +45,7 @@
   shell:
     cmd: |
       echo "{{ hostvars[groups['k8s_master'][0]]['kubeconf']['stdout'] }}" >> /home/centos/kubeconfig.conf
+      echo "{{ hostvars[groups['k8s_master'][0]]['kubeconf']['stdout'] }}" >> /tmp
       sudo chown centos:centos /home/centos/kubeconfig.conf
       export KUBECONFIG=/home/centos/kubeconfig.conf
 
